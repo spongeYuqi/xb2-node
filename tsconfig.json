@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",//编译结果文件放置地址
+    "baseUrl": "./",
+    "incremental": true
+    },
+//编译所有src下的文件    
+"include": [
+    "src/**/*"
+    ],
+"exclude": [
+"node_modules","dist"
+    ]
+}
