@@ -1,6 +1,6 @@
 //定义接口
 import express from "express";
-//导入所有post.controller导出的东西,并取名as
+//导入所有post.controller导出的东西,并取名as  源头是post.service  return的data
 import * as postController from './post.controller';
 //导入中间件
 import { requestUrl } from "../app/app.middleware";//不能写src/app/app.middleware
@@ -8,11 +8,13 @@ import { requestUrl } from "../app/app.middleware";//不能写src/app/app.middle
 const router = express.Router();
 
 /**
- * 内容列表接口   地址，处理器
+ * 内容列表接口   路径，中间件函数，路由处理函数
  */
 router.get('/posts',requestUrl,postController.index);//在控制台输出，在服务器输出
-
-
+//客户端发送 GET 请求到 /posts 时将触发此路由处理函数
+//requestUrl 是一个中间件函数  输出请求地址
+//postController.index 是一个路由处理函数，用于处理 /posts 路径的 GET 请求。这个函数通常包含了处理请求的具体逻辑，并生成响应
+//.index 在这指方法，通常用于处理列出资源集合的请求。在 RESTful API 设计中，.index 方法通常对应于 GET /resources 请求，用于获取资源集合
 
 
 /**
