@@ -26,6 +26,12 @@ export const defaultErrorHandler = (
     res: Response,
     nex: NextFunction
 ) => {
+    if(error.message) {
+        console.log('✨',error.message);
+    }
+
+
+
     let statusCode: number, message: string;
 
     /**

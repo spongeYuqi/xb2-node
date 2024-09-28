@@ -12,9 +12,26 @@ const router = express.Router();
  */
 router.get('/posts',requestUrl,postController.index);//在控制台输出，在服务器输出
 //客户端发送 GET 请求到 /posts 时将触发此路由处理函数
-//requestUrl 是一个中间件函数  输出请求地址
+//requestUrl 是一个中间件函数  输出请求地址 /posts
 //postController.index 是一个路由处理函数，用于处理 /posts 路径的 GET 请求。这个函数通常包含了处理请求的具体逻辑，并生成响应
-//.index 在这指方法，通常用于处理列出资源集合的请求。在 RESTful API 设计中，.index 方法通常对应于 GET /resources 请求，用于获取资源集合
+//.index是指postController的一个分支模块
+
+
+/**
+ * 创建内容
+ */
+router.post('/posts',postController.store);
+
+
+/**
+ * 更新内容  请求要求用的HTTP方法是patch
+ */
+router.patch('/posts/:postI',postController.update);
+
+
+/**
+ * 删除内容
+ */router.delete('/posts/:postI',postController.destroy);
 
 
 /**
