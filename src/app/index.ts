@@ -12,7 +12,8 @@ import { defaultErrorHandler } from "./app.middleware";
 //导入userRouter
 import userRouter from '../user/user.router';
 
-
+//导入authRouter
+import authRouter from '../auth/auth.router';
 
 /**
  * 创建应用,名字app
@@ -30,7 +31,7 @@ app.use(express.json());
 /**
  * 配置app去使用定义的接口,这样应用就包含postRouter定义的接口了
  */
-app.use(postRouter,userRouter);
+app.use(postRouter,userRouter,authRouter);
 
 /**
  * 默认异常处理器

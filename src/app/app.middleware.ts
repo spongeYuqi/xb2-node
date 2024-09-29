@@ -50,7 +50,15 @@ export const defaultErrorHandler = (
             statusCode = 400;
             message = '请提供用户密码';
             break;
-        //注意先后顺序
+        case 'USER_DOES_NOT_EXIST':
+            statusCode = 400;
+            message = '用户不存在';
+            break;
+        case 'PASSWORD_DOES_NOT_MATCH':
+            statusCode = 400;
+            message = '密码错误';
+            break;
+        //先后顺序其实由if判断的先后触发顺序决定
 
         default:
             statusCode = 500;
