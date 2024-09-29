@@ -90,8 +90,8 @@ export const update = async (
     try {
         const data = await updatePost(parseInt(postI,10),post);//async (postID:number,post:PostModel)
         res.send(data);
-    } catch (erro) {
-        nex(erro);
+    } catch (error) {
+        nex(error);
     }
 
 };
@@ -114,8 +114,8 @@ export const destroy = async (
     try {
         const data = await deletePost(parseInt(postI,10));
         res.send(data);
-    } catch (erro) {
-        nex(erro);
+    } catch (error) {
+        nex(error);
     }
 
 };

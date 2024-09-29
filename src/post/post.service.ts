@@ -48,7 +48,7 @@ export const getPosts = async () => {
     //使用数组解构赋值 (const [data] = ...) 可以方便地获取查询结果的第一个元素（即数据集）
     //通过使用 mysql2 库提供的 promise() 方法，可以将数据库连接转换为一个支持 Promise 的对象，这意味着你可以使用 Promise 的相关方法（如 .then()、.catch()）以及 async/await 语法来处理异步操作
 
-    return data;
+    return data;//data[0]只返回第一组
     
 };
 
