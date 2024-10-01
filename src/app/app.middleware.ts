@@ -58,6 +58,10 @@ export const defaultErrorHandler = (
             statusCode = 400;
             message = '密码错误';
             break;
+        case 'UNAUTHORIZED':
+            statusCode = 401;
+            message = '请先登录';
+            break;
         //先后顺序其实由if判断的先后触发顺序决定
 
         default:

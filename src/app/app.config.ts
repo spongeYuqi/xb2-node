@@ -23,3 +23,11 @@ export const {
     MYSQL_PASSWORD,
     MYSQL_DATABASE,
 } = process.env;
+
+
+/**
+ * 密钥配置
+ */ 
+export let {PRIVATE_KEY,PUBLIC_KEY} =process.env;
+PRIVATE_KEY = Buffer.from(PRIVATE_KEY,'base64').toString();//从base64还原  类似a=a+1
+PUBLIC_KEY = Buffer.from(PUBLIC_KEY,'base64').toString();

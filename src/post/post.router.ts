@@ -4,6 +4,10 @@ import express from "express";
 import * as postController from './post.controller';
 //导入中间件
 import { requestUrl } from "../app/app.middleware";//不能写src/app/app.middleware
+import { authGuard } from "../auth/auth.middleware";
+
+
+
 
 const router = express.Router();
 
@@ -20,7 +24,7 @@ router.get('/posts',requestUrl,postController.index);//在控制台输出，在�
 /**
  * 创建内容
  */
-router.post('/posts',postController.store);
+router.post('/posts',authGuard,postController.store);
 
 
 /**

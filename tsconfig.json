@@ -14,10 +14,7 @@
     "incremental": true
     },
 //编译所有src下的文件    
-"include": [
-    "src/**/*"
-    ],
-"exclude": [
-"node_modules","dist"
-    ]
+"include": ["src/**/*"],
+"exclude": ["node_modules","dist"],
+"files": ["types/express.d.ts"]
 }

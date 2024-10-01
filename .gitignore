@@ -19,3 +19,4 @@ npm-debug.log*
 
 #App 不想在项目的代码仓库里包含这些环境变量信息
 .env*
+config/*.key

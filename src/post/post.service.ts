@@ -41,7 +41,7 @@ export const getPosts = async () => {
             ) as user
         FROM post
         LEFT JOIN user
-            ON user.id = post.userID`//存储 SQL 查询语句  要加单引号    as user取名       
+            ON user.id = post.userID`//存储 SQL 查询语句  要加单引号    as user取名（没有FROM user因为有LEFT JOIN user会去搜索这个表）       
         ;//亲测可以省略分号，但以后别纠结这些，严谨的！
     const [data] = await connection.promise().query(statement);//await 关键字用于等待一个 Promise 的解析结果。这意味着在这行代码之前的所有同步操作都会执行完毕，然后这行代码会暂停执行，直到 Promise 解析完成
     //query 方法返回一个包含多个元素的数组，第一个元素通常是查询结果（即数据集）

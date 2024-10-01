@@ -56,10 +56,12 @@ export const store = async (
 ) => {
     //准备数据
     const {title,content} = req.body;//id是可选的（不断send,会自增），来自请求的Body
+    const { id: userID } = req.user;//将提取出来的 id 属性值改名为 userId 的变量（因为PostModel中是userId）
+
 
     //创建内容
     try {
-        const data = await creatPost({title,content});//实则就是执行sql语句返回的data的title,content
+        const data = await creatPost({title,content,userID});//实则就是执行sql语句返回的data的title,content
         res.status(201).send(data);
         //想要得到INSERt的数据呢？用第一次的get即可
     } catch (error) {
