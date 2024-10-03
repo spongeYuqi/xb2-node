@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt';//验证密码
 import jwt from 'jsonwebtoken';
 import { PUBLIC_KEY } from "../app/app.config";
 import { TokenPayload } from "./auth.interface";
+import { possess } from "./auth.service";
+import { parseInt } from "lodash";
+
+
+
 
 /** 
  * 验证用户登录
@@ -80,4 +85,49 @@ export const authGuard = (
     } catch (error) {
         next( new Error('UNAUTHORIZED'));
     }
+};
+
+
+/**
+ * 访问控制
+ */
+interface AccessControlOptions {
+    possession?: boolean;
+}//这个属性用来指示是否需要检查资源的所有权。
+
+export const accessControl = (options: AccessControlOptions) => {
+    return async (req:Request, res:Response, next:NextFunction) => {
+        console.log('✨访问控制');
+
+        //解构选项
+        const { possession } = options;
+
+        //当前用户ID
+        const { id:userId } = req.user;
+
+        //放行管理员
+        if(userId == 1) return next();//如果用户的 Id 是 1（假设这是管理员的 Id），则直接调用 next() 放行请求
+
+        //准备资源
+        const resourceIdParam = Object.keys(req.params)[0];//req.params 是一个对象，包含了请求 URL (/books/123）中的路径参数。req.params 将包含 { bookId: '123' }，Object.keys() 方法返回一个数组，其中包含对象的所有可枚举属性的键名['bookId']
+        const resourceType = resourceIdParam.replace('Id','');//去除 resourceIdParam 中的 'Id' 后缀,目的是为了从资源 ID 的键名中提取出资源的类型名称
+        const resourceId = parseInt(req.params[resourceIdParam], 10);//如果 resourceIdParam 是 'bookId'，并且 req.params 中的 bookId 值为 '123'，那么 parseInt(req.params.bookId, 10) 的结果将是 123
+
+        //检查资源拥有权(如果 possession 为 true，则调用 possess 函数来检查当前用户是否拥有该资源)
+        if (possession) {
+            try {
+                const ownResouce = await possess({ resourceId, resourceType, userId });
+
+                if (!ownResouce) {
+                    return next (new Error('USER_DOES_NOT_OWN_RESOURCE'));
+                }
+            } catch (error) {
+                return next(error);
+                
+            }
+        }
+
+        //下一步
+        next();
+    };
 };

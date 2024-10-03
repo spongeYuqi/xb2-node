@@ -4,7 +4,7 @@ import express from "express";
 import * as postController from './post.controller';
 //导入中间件
 import { requestUrl } from "../app/app.middleware";//不能写src/app/app.middleware
-import { authGuard } from "../auth/auth.middleware";
+import { authGuard, accessControl } from "../auth/auth.middleware";
 
 
 
@@ -30,12 +30,22 @@ router.post('/posts',authGuard,postController.store);
 /**
  * 更新内容  请求要求用的HTTP方法是patch
  */
-router.patch('/posts/:postI',postController.update);
+router.patch(
+    '/posts/:postI',
+    authGuard,
+    accessControl({ possession:true}),
+    postController.update,
+);
 
 
 /**
  * 删除内容
- */router.delete('/posts/:postI',postController.destroy);
+ */router.delete(
+    '/posts/:postI',
+    authGuard,
+    accessControl({ possession:true}),
+    postController.destroy,
+);
 
 
 /**

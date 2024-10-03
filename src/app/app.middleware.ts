@@ -62,6 +62,10 @@ export const defaultErrorHandler = (
             statusCode = 401;
             message = '请先登录';
             break;
+        case 'USER_DOES_NOT_OWN_RESOURCE':
+            statusCode = 403;//forbid
+            message = '您不能处理这个内容';
+            break;
         //先后顺序其实由if判断的先后触发顺序决定
 
         default:
