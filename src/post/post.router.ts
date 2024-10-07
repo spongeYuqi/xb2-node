@@ -31,7 +31,7 @@ router.post('/posts',authGuard,postController.store);
  * 更新内容  请求要求用的HTTP方法是patch
  */
 router.patch(
-    '/posts/:postI',
+    '/posts/:postId',//要和post.controller中的const {postId} = req.params一致！！！
     authGuard,
     accessControl({ possession:true}),
     postController.update,
@@ -41,7 +41,7 @@ router.patch(
 /**
  * 删除内容
  */router.delete(
-    '/posts/:postI',
+    '/posts/:postId',
     authGuard,
     accessControl({ possession:true}),
     postController.destroy,

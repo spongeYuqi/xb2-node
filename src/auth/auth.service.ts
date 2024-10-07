@@ -31,10 +31,11 @@ export const SignToken = (options:SignTokenOptions) => {
  * 检查用户是否拥有指定资源
  */
 interface PossessOptions {
-    resourceId: number;
-    resourceType: string;
-    userId: number;
+    resourceId: number;//目标内容的id
+    resourceType: string;//目标的表
+    userId: number;//修改用户的id
 }
+ //修改用户的id要与被修改表的id（内容的id）的内容的userid一致才有权限
 
 export const possess = async (options:PossessOptions) => {
     //准备选项
@@ -48,8 +49,8 @@ export const possess = async (options:PossessOptions) => {
     `;
     //resourceType 表中的 id 列计数命名为count
     //${resourceType} 是一个动态变量，代表需要查询的表名,由 resourceType 变量决定
-    //查询 resourceType 表中 id 列等于某个值的行  省略了后面的.userID
-
+    //查询 resourceType 表中 id 列等于某个值的行  省略了后面的.userID   
+    //修改用户的id要与被修改表的id（内容的id）的内容的userid一致才有权限
 
     //检查拥有权
     const [data] = await connection

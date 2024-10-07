@@ -81,7 +81,7 @@ export const update = async (
     nex: NextFunction//最后一个参数不用加,
 ) => {
     //获取内容 ID  req.params 对象中解构出 postId 变量
-    const {postI} = req.params;//req.params 是一个对象，其中包含了从请求 URL 中提取出来的所有命名参数,这些参数是在路由定义时通过冒号 (:) 指定的
+    const {postId} = req.params;//req.params 是一个对象，其中包含了从请求 URL 中提取出来的所有命名参数,这些参数是在路由定义时通过冒号 (:) 指定的
 
     //准备数据
     // const {title,content} = req.body;
@@ -90,7 +90,7 @@ export const update = async (
 
     //更新
     try {
-        const data = await updatePost(parseInt(postI,10),post);//async (postID:number,post:PostModel)
+        const data = await updatePost(parseInt(postId,10),post);//async (postID:number,post:PostModel)
         res.send(data);
     } catch (error) {
         nex(error);
@@ -109,12 +109,12 @@ export const destroy = async (
     nex: NextFunction//最后一个参数不用加,
 ) => {
     //获取内容 ID  req.params 对象中解构出 postId 变量
-    const {postI} = req.params;
+    const {postId} = req.params;
 
    
     //删除内容
     try {
-        const data = await deletePost(parseInt(postI,10));
+        const data = await deletePost(parseInt(postId,10));
         res.send(data);
     } catch (error) {
         nex(error);

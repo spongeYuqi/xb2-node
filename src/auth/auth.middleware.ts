@@ -106,7 +106,7 @@ export const accessControl = (options: AccessControlOptions) => {
         const { id:userId } = req.user;
 
         //放行管理员
-        if(userId == 1) return next();//如果用户的 Id 是 1（假设这是管理员的 Id），则直接调用 next() 放行请求
+        if(userId == 1) {console.log('我是超级管理员');return next(); }//如果用户的 Id 是 1（假设这是管理员的 Id），则直接调用 next() 放行请求
 
         //准备资源
         const resourceIdParam = Object.keys(req.params)[0];//req.params 是一个对象，包含了请求 URL (/books/123）中的路径参数。req.params 将包含 { bookId: '123' }，Object.keys() 方法返回一个数组，其中包含对象的所有可枚举属性的键名['bookId']
@@ -117,7 +117,7 @@ export const accessControl = (options: AccessControlOptions) => {
         if (possession) {
             try {
                 const ownResouce = await possess({ resourceId, resourceType, userId });
-
+                console.log(ownResouce);
                 if (!ownResouce) {
                     return next (new Error('USER_DOES_NOT_OWN_RESOURCE'));
                 }
