@@ -15,6 +15,11 @@ import userRouter from '../user/user.router';
 //导入authRouter
 import authRouter from '../auth/auth.router';
 
+//导入fileRouter
+import fileRouter from '../file/file.router';
+
+
+
 /**
  * 创建应用,名字app
  */
@@ -31,7 +36,7 @@ app.use(express.json());
 /**
  * 配置app去使用定义的接口,这样应用就包含postRouter定义的接口了
  */
-app.use(postRouter,userRouter,authRouter);
+app.use(postRouter,userRouter,authRouter,fileRouter);
 
 /**
  * 默认异常处理器

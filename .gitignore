@@ -11,12 +11,14 @@ npm-debug.log*
 .DS_Store
 
 #IDE - VSCode//忽略所有VSCode的文件//!不忽略
-.VSCode/*
-!.VSCode/settings.json
-!.VSCode/tasks.json
-!.VSCode/launch.json
-!.VSCode/extensions.json
+.vscode/*
+!.vscode/*.code-snippets
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 #App 不想在项目的代码仓库里包含这些环境变量信息
 .env*
 config/*.key
+/uploads
