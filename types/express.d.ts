@@ -10,6 +10,7 @@ declare global {
     namespace Express {
         export interface Request {
             user: TokenPayload;
+            fileMetaData: { width?: number; height?: number; metadata?: {} };//让其他中间件或接口处理器使用图片信息
         }
     }
 }

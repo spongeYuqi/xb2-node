@@ -1,5 +1,10 @@
+import path from 'path';
+import Jimp from 'jimp';
 import { connection } from "../app/database/mysql";
 import { FileModel } from "./file.model";
+
+
+
 
 /**
  * 存储文件位置
@@ -34,4 +39,40 @@ export const findFileById = async (fileId: number) => {
   
     // 提供数据
     return data[0];
+};
+
+
+/**
+ * 调整图像尺寸
+ */
+export const imageResizer = async (image: Jimp, file: Express.Multer.File) => {
+  // 图像尺寸
+  const { imageSize } = image['_exif'];
+
+  // 文件路径
+  const filePath = path.join(file.destination, 'resized', file.filename);//file.destination存储文件目录（uploads）/uploads下的resized目录/文件名
+
+  // 大尺寸
+  if (imageSize.width > 1280) {
+    image
+      .resize(1280, Jimp.AUTO)//宽，高自动
+      .quality(85)//质量
+      .write(`${filePath}-large`);//处理结果放入指定路径
+  }
+
+  // 中等尺寸
+  if (imageSize.width > 640) {
+    image
+      .resize(640, Jimp.AUTO)
+      .quality(85)
+      .write(`${filePath}-medium`);
+  }
+
+  // 缩略图
+  if (imageSize.width > 320) {
+    image
+      .resize(320, Jimp.AUTO)
+      .quality(85)
+      .write(`${filePath}-thumbnail`);
+  }
 };
