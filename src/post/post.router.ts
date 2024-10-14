@@ -49,6 +49,26 @@ router.patch(
 
 
 /**
+ * 添加内容标签
+ */
+router.post(
+    '/posts/:postId/tag',
+    authGuard,
+    accessControl({ possession: true }),
+    postController.storePostTag,
+  );
+  
+  /**
+   * 移除内容标签
+   */
+  router.delete(
+    '/posts/:postId/tag',
+    authGuard,
+    accessControl({ possession: true }),
+    postController.destroyPostTag,
+  );
+
+/**
  * 导出路由,默认导出
  */
 export default router;
