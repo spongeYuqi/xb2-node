@@ -78,6 +78,10 @@ export const defaultErrorHandler = (
             statusCode = 400;
             message = '内容已包含此标签';
             break;
+        case 'UNABLE_TO_REPLY_THIS_COMMENT':
+            statusCode = 400;
+            message = '不能回复此评论';
+            break;
         //先后顺序其实由if判断的先后触发顺序决定
 
         default:
