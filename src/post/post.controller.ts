@@ -45,7 +45,10 @@ export const index = async (
     // res.send(posts);//亲测可以直接res.send(getPosts());
 
     try {
-        const posts = await getPosts();
+        const posts = await getPosts({ 
+          sort: req.sort,
+          Filter: req.Filter,
+        });
         res.send(posts);
 
     } catch (error) {

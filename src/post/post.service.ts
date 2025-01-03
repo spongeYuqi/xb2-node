@@ -1,7 +1,8 @@
 //导入数据仓库连接
+import internal from "stream";
 import { connection } from "../app/database/mysql";
 import { PostModel } from "./post.model";//
-
+import { sqlFragment } from './post.provider';
 
 /**
  * 获取内容列表
@@ -28,22 +29,49 @@ import { PostModel } from "./post.model";//
 /**
  * 获取内容列表
  */
-export const getPosts = async () => {
-    
+export interface GetPostsOptionsFilter {
+    name: string;
+    sql?: string;
+    param?: string;
+}
+//问号表示可选
+interface GetPostsOptions {
+    sort?: string;
+    Filter?: GetPostsOptionsFilter;//req.filter已经存在自带
+}
+
+export const getPosts = async (options:GetPostsOptions) => {
+    const { sort, Filter } = options;
+
+    // sql 参数
+    let params: Array<any> = [];
+
+    // 设置sql 参数
+    if (Filter.param) {
+        params = [Filter.param, ...params];
+    }
+//...params 会将 params 数组中的每个元素展开并依次插入到新数组中
+
     const statement =
         `SELECT
             post.id,
             post.title,
             post.content,
-            JSON_OBJECT(
-                'id',user.id,
-                'name',user.name
-            ) as user
+            ${sqlFragment.user},
+            ${sqlFragment.totalComments},
+            ${sqlFragment.file},
+            ${sqlFragment.tags}
         FROM post
-        LEFT JOIN user
-            ON user.id = post.userID`//存储 SQL 查询语句  要加单引号    as user取名（没有FROM user因为有LEFT JOIN user会去搜索这个表）       
-        ;//亲测可以省略分号，但以后别纠结这些，严谨的！
-    const [data] = await connection.promise().query(statement);//await 关键字用于等待一个 Promise 的解析结果。这意味着在这行代码之前的所有同步操作都会执行完毕，然后这行代码会暂停执行，直到 Promise 解析完成
+            ${sqlFragment.leftJoinUser}
+            ${sqlFragment.leftJoinOneFile}
+            ${sqlFragment.leftJoinTag}
+            WHERE ${Filter.sql}
+            GROUP BY post.id
+            ORDER BY ${sort}`    
+        ;
+        //亲测可以省略分号，但以后别纠结这些，严谨的！//存储 SQL 查询语句  要加单引号    as user取名（没有FROM user因为有LEFT JOIN user会去搜索这个表）       
+        
+    const [data] = await connection.promise().query(statement, params);//await 关键字用于等待一个 Promise 的解析结果。这意味着在这行代码之前的所有同步操作都会执行完毕，然后这行代码会暂停执行，直到 Promise 解析完成
     //query 方法返回一个包含多个元素的数组，第一个元素通常是查询结果（即数据集）
     //使用数组解构赋值 (const [data] = ...) 可以方便地获取查询结果的第一个元素（即数据集）
     //通过使用 mysql2 库提供的 promise() 方法，可以将数据库连接转换为一个支持 Promise 的对象，这意味着你可以使用 Promise 的相关方法（如 .then()、.catch()）以及 async/await 语法来处理异步操作
