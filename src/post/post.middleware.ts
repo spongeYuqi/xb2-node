@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import { POSTS_PER_PAGE } from '../app/app.config';
+import { toNumber } from 'lodash';
 
 /**
  * 排序方式
@@ -71,6 +73,33 @@ export const filter = async (
         param: `${user}`,
       };
     }
+//${tag}会从url中获取tag的赋值
+
+  // 下一步
+  next();
+};
+
+/**
+ * 内容分页
+ */
+export const paginate = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  //当前页码
+  const { page = 1} = request.query;//page提供了默认值1。这意味着如果request.query对象中不存在page属性，那么变量page将被赋予默认值1。
+
+  //每页内容数量
+  const limit = parseInt(POSTS_PER_PAGE, 10) || 30;
+
+  let PAGE = Number(page);
+
+  //计算出偏移量
+  const offset = limit * (PAGE - 1 );
+  
+  //设置请求中的分页
+  request.pagination = { limit, offset };
 
   // 下一步
   next();

@@ -7,6 +7,7 @@ import {
     createPostTag,
     postHasTag,
     deletePostTag,
+    getPostsTotalCount,
 } from "./post.service";
 import { TagModel } from "../tag/tag.model";
 import { getTagByName, createTag } from "../tag/tag.service";
@@ -45,9 +46,21 @@ export const index = async (
     // res.send(posts);//亲测可以直接res.send(getPosts());
 
     try {
+      
+      //统计内容数量
+      const totalCount = await getPostsTotalCount({Filter: req.Filter});
+      //设置响应头部
+      res.header('X-Total-Count', totalCount);
+
+    } catch (error) {
+        nex(error);
+    }
+
+    try {
         const posts = await getPosts({ 
           sort: req.sort,
           Filter: req.Filter,
+          pagination: req.pagination,
         });
         res.send(posts);
 

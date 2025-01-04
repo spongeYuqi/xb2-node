@@ -4,7 +4,7 @@
  * 这样做可以让开发者在请求处理函数中方便地访问经过解码和验证的 JWT 令牌中的用户信息。
  */
 import { TokenPayload } from '../src/auth/auth.interface';
-import { GetPostsOptionsFilter } from '../src/post/post.service';
+import { GetPostsOptionsFilter,GetPostsOptionsPagination } from '../src/post/post.service';
 
 //声明gloabal  命令空间ExpreFss   
 declare global {
@@ -14,6 +14,7 @@ declare global {
             fileMetaData: { width?: number; height?: number; metadata?: {} };//让其他中间件或接口处理器使用图片信息
             sort: string;
             Filter: GetPostsOptionsFilter;//req.filter已经存在！
+            pagination: GetPostsOptionsPagination;
         }
     }
 }

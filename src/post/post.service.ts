@@ -34,17 +34,28 @@ export interface GetPostsOptionsFilter {
     sql?: string;
     param?: string;
 }
+
+export interface GetPostsOptionsPagination {
+    limit: number;
+    offset: number;
+}
+
 //问号表示可选
 interface GetPostsOptions {
     sort?: string;
     Filter?: GetPostsOptionsFilter;//req.filter已经存在自带
+    pagination?: GetPostsOptionsPagination;
 }
 
 export const getPosts = async (options:GetPostsOptions) => {
-    const { sort, Filter } = options;
+    const { 
+        sort, 
+        Filter, 
+        pagination: { limit, offset }, 
+    } = options;
 
     // sql 参数
-    let params: Array<any> = [];
+    let params: Array<any> = [limit, offset];
 
     // 设置sql 参数
     if (Filter.param) {
@@ -63,14 +74,17 @@ export const getPosts = async (options:GetPostsOptions) => {
             ${sqlFragment.tags}
         FROM post
             ${sqlFragment.leftJoinUser}
-            ${sqlFragment.leftJoinOneFile}
+            ${sqlFragment.leftJoinOneFile } 
             ${sqlFragment.leftJoinTag}
             WHERE ${Filter.sql}
             GROUP BY post.id
-            ORDER BY ${sort}`    
+            ORDER BY ${sort}
+            LIMIT ?
+            OFFSET ?`    
         ;
         //亲测可以省略分号，但以后别纠结这些，严谨的！//存储 SQL 查询语句  要加单引号    as user取名（没有FROM user因为有LEFT JOIN user会去搜索这个表）       
-        
+        //问号 (?) 是 SQL 查询语句中的占位符，用于参数化查询。这些占位符将被 params 数组中的值替换
+        //SQL 语句中只有两个问号，分别对应 LIMIT ? OFFSET ?。这意味着如果 Filter.param 存在，实际上你会有三个参数，而 SQL 中只有两个占位符。这会导致参数数量不匹配的问题
     const [data] = await connection.promise().query(statement, params);//await 关键字用于等待一个 Promise 的解析结果。这意味着在这行代码之前的所有同步操作都会执行完毕，然后这行代码会暂停执行，直到 Promise 解析完成
     //query 方法返回一个包含多个元素的数组，第一个元素通常是查询结果（即数据集）
     //使用数组解构赋值 (const [data] = ...) 可以方便地获取查询结果的第一个元素（即数据集）
@@ -183,4 +197,31 @@ export const createPostTag = async (postId: number, tagId: number) => {
   
     // 提供数据
     return data;
+  };
+
+/**
+ * 统计内容数量
+ */
+export const getPostsTotalCount = async (options: GetPostsOptions) => {
+    const { Filter } = options;
+  
+    // SQL 参数
+    let params = [Filter.param];
+  
+    // 准备查询
+    const statement = `
+      SELECT
+        COUNT(DISTINCT post.id) AS total
+      FROM post
+      ${sqlFragment.leftJoinUser}
+      ${sqlFragment.leftJoinOneFile}
+      ${sqlFragment.leftJoinTag}
+      WHERE ${Filter.sql}
+    `;
+//如果不需要筛选只要前三行就行，根据实际测试，的确，此中间件函数不需要任何外部输入！
+    // 执行查询
+    const [data] = await connection.promise().query(statement, params);
+  
+    // 提供结果
+    return data[0].total;
   };
