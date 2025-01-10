@@ -82,6 +82,10 @@ export const defaultErrorHandler = (
             statusCode = 400;
             message = '不能回复此评论';
             break;
+        case 'FILE_TYPE_NOT_ACCEPT':
+            statusCode = 400;
+            message = '不能上传此类型文件';
+            break;
         //先后顺序其实由if判断的先后触发顺序决定
 
         default:

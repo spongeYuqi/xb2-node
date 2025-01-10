@@ -1,13 +1,42 @@
 import { Request, Response, NextFunction } from "express";
-import multer from 'multer';
+import multer, { FileFilterCallback} from 'multer';
 import Jimp from 'jimp';
 import { imageResizer } from './file.service';
+import { type } from "os";
+
+/**
+ * 文件过滤器
+ */
+export const FileFilter = (fileTypes: Array<string>) => {
+  return (
+    request: Request,
+    file: Express.Multer.File,
+    callback: FileFilterCallback,
+  ) => {
+    //测试文件类型
+    const allowed = fileTypes.some(type => type === file.mimetype);//some测试数组中的元素(type)是否至少有一个满足上传的文件类型file.mimetype，MIME 类型（多用途互联网邮件扩展类型）
+
+    if (allowed) {
+      //允许上传
+      callback(null,true)//true：接受文件，继续上传过程
+    } else {
+      //拒绝上传
+      callback(new Error('FILE_TYPE_NOT_ACCEPT'));
+    }
+
+  };
+};
+
+//文件过滤器实例  将 fileTypes 参数赋值为一个包含特定 MIME 类型的数组
+const fileUploadFilter = FileFilter(['image/png','image/jpg','image/jpeg']);
+
 
 /**
  * 创建一个Multer
  */
 const fileUpload = multer({
     dest: 'uploads/',//上传文件存储位置
+    fileFilter: fileUploadFilter,//不是FileFilter，那个是自定义过滤函数的名字（也能写成fileFilter），这个是multer自带的
 });
 
 /**
