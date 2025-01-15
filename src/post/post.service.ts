@@ -71,11 +71,14 @@ export const getPosts = async (options:GetPostsOptions) => {
             ${sqlFragment.user},
             ${sqlFragment.totalComments},
             ${sqlFragment.file},
-            ${sqlFragment.tags}
+            ${sqlFragment.tags},
+            ${sqlFragment.totalLikes}
+
         FROM post
             ${sqlFragment.leftJoinUser}
             ${sqlFragment.leftJoinOneFile } 
             ${sqlFragment.leftJoinTag}
+            ${Filter.name == 'userLiked' ? sqlFragment.innerJoinUserLikePost :''}
             WHERE ${Filter.sql}
             GROUP BY post.id
             ORDER BY ${sort}
@@ -216,6 +219,7 @@ export const getPostsTotalCount = async (options: GetPostsOptions) => {
       ${sqlFragment.leftJoinUser}
       ${sqlFragment.leftJoinOneFile}
       ${sqlFragment.leftJoinTag}
+      ${Filter.name == 'userLiked' ? sqlFragment.innerJoinUserLikePost :''}
       WHERE ${Filter.sql}
     `;
 //如果不需要筛选只要前三行就行，根据实际测试，的确，此中间件函数不需要任何外部输入！

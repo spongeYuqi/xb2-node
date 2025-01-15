@@ -6,9 +6,6 @@ import express from "express";
 //导入router  -> router-> controller-> service的data
 import postRouter from '../post/post.router';
 
-//导入err
-import { defaultErrorHandler } from "./app.middleware";
-
 //导入userRouter
 import userRouter from '../user/user.router';
 
@@ -20,6 +17,12 @@ import fileRouter from '../file/file.router';
 import tagRouter from '../tag/tag.router';
 import commentRouter from '../comment/comment.router';
 import avatarRouter from '../avatar/avatar.router';
+import likeRouter from '../like/like.router';
+
+
+//导入err
+import { defaultErrorHandler } from "./app.middleware";
+
 
 /**
  * 创建应用,名字app
@@ -45,7 +48,8 @@ app.use(
     tagRouter,
     avatarRouter,
     commentRouter,
-    
+    likeRouter,
+
     );
 //不知道有没有顺序要求
 
