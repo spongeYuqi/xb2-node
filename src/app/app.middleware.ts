@@ -84,7 +84,19 @@ export const defaultErrorHandler = (
             break;
         case 'FILE_TYPE_NOT_ACCEPT':
             statusCode = 400;
-            message = '不能上传此类型文件';
+            message = '不能上传此类型文件'; 
+            break;
+        case 'NOT_FOUND':
+            statusCode = 404;
+            message = '没找到 ~~%🦖';
+            break;
+        case 'USER_NOT_FOUND':
+            statusCode = 404;
+            message = '没找到用户 ~~%🦖';
+            break;
+        case 'PASSWORD_IS_THE_SAME':
+            statusCode = 400;
+            message = '要修改的密码不能与原密码一样';
             break;
         //先后顺序其实由if判断的先后触发顺序决定
 

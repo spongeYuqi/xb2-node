@@ -33,6 +33,11 @@ PRIVATE_KEY = Buffer.from(PRIVATE_KEY,'base64').toString();//从base64还原  �
 PUBLIC_KEY = Buffer.from(PUBLIC_KEY,'base64').toString();
 
 /**
- * 内容分页
+ * 内容分页post
  */
-export const { POSTS_PER_PAGE } = process.env;
+export const  POSTS_PER_PAGE  = parseInt(process.env['POSTS_PER_PAGE'],10);
+
+/**
+ * 评论分页comment
+ */
+export const  COMMENTS_PER_PAGE  = parseInt(process.env['COMMENTS_PER_PAGE'],10);

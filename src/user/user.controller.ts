@@ -1,5 +1,6 @@
 //资源接口
 import { Request, Response, NextFunction } from "express";
+import _ from 'lodash';
 import { UserModel } from "./user.model";
 import * as userService from './user.service';//导入整个模块，而非它的具体的createUser，注意区别！所以后面await要.createUser
 
@@ -24,3 +25,52 @@ export const store = async (
     }
 
 };
+
+/**
+ * 用户账户
+ */
+export const show = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+    // 准备数据
+    const { userId } = request.params;
+
+    // 调取用户
+    try {
+      const user = await userService.getUserById(parseInt(userId, 10));
+  
+      if (!user) {
+        return next(new Error('USER_NOT_FOUND'));
+      }
+  
+      // 做出响应
+      response.send(user);
+    } catch (error) {
+      next(error);
+    }
+};
+
+/**
+ * 更新用户
+ */
+export const update = async (
+    request: Request,
+    response: Response,
+    next: NextFunction,
+  ) => {
+    // 准备数据
+    const { id } = request.user;
+    const userData = _.pick(request.body.update, ['name', 'password']);//从request.body.update挑选出['name', 'password']
+  
+    // 更新用户
+    try {
+      const data = await userService.updateUser(id, userData);
+  
+      // 做出响应
+      response.send(data);
+    } catch (error) {
+      next(error);
+    }
+  };
