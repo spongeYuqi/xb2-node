@@ -18,7 +18,7 @@ import tagRouter from '../tag/tag.router';
 import commentRouter from '../comment/comment.router';
 import avatarRouter from '../avatar/avatar.router';
 import likeRouter from '../like/like.router';
-
+import appRouter from './app.router';
 
 //导入err
 import { defaultErrorHandler } from "./app.middleware";
@@ -49,6 +49,7 @@ app.use(
     avatarRouter,
     commentRouter,
     likeRouter,
+    appRouter,
 
     );
 //不知道有没有顺序要求
